@@ -38,7 +38,7 @@
             $comando->bindParam(":senha",$usuario->senha);
             $comando->bindParam(":id",$usuario->id);
             $comando->execute();
-            return $usuario;        
+            return $usuario;            
         }
 
         public function listar()

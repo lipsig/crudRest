@@ -11,23 +11,70 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     </head>
 </head>
+
+<style>
+@import "bourbon";
+
+body {
+	background: #eee !important;	
+}
+
+.wrapper {	
+	margin-top: 80px;
+  margin-bottom: 80px;
+}
+
+.form-signin {
+  max-width: 380px;
+  padding: 15px 35px 45px;
+  margin: 0 auto;
+  background-color: #fff;
+  border: 1px solid rgba(0,0,0,0.1);  
+
+
+
+
+	
+
+
+}
+
+
+
+</style>
+
 <body>
-    <form action="#" id="formLogin">
+    <div class="wrapper">
+    <div class="form-signin">
 
-        <input id="login" class="form-control" type="text">
-        <input id="senha" class="form-control" type="text">
-        <input id="submit" type="submit" value="teste">
+       
 
-    </form>
+        <h2 class="form-signin-heading">Fazer Login</h2>
+            <br>
+          <input id="login" type="login" class="form-control" placeholder="Insira seu login" autofocus=""/>
+         <br>
+          <input id="senha" type="password" class="form-control" placeholder="Senha"/>      
+            <br>
+          <button style="margin-top: 20px;"class="btn btn-lg btn-primary btn-block" id="submit">Login</button>   
+
+    </div>
+</div>
+
 </body>
 
 <script>
 
+    
 
+    $("#submit").on("click", function (event) {
 
+        if($('#login').val()=="" && $('#senha').val()==""){ alert("seus dados estão incorretos, verifique seu login e sua senha");} 
+        if($('#login').val()==""){ alert("insira seu login");} 
+        if($('#senha').val()==""){ alert("insira sua senha");} 
 
-
-    $("#formLogin").on("submit", function (event) {
+        
+            else{
+        
     var formData = new FormData();
 
     var formData = {
@@ -40,23 +87,27 @@
         dataType: 'text',
         contentType: 'application/json',
         data: JSON.stringify(formData),
-        async: false,
+        async: true,
         type: 'post',
         success: function (data) {
-            
-            console.log(data);
+                
          
             
-            window.sessionStorage.token = data;
+            window.sessionStorage.token = data.replace(/"/g,"");
             console.log(window.sessionStorage.token);
-            window.location.href = "front.php";
-        }
+            window.location.href = "front.html";
+        },
+        
+        error: function () {
+                            alert("Verifique se o usario e senha estão corretos");
+                        }
     });
 
-
+            }
     console.log(formData);
 
 });
+
 
 
 </script>

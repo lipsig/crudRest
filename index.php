@@ -10,6 +10,9 @@ require './vendor/autoload.php';
 
 $app = new \Slim\App;
 
+$app->get('/login', function ($request, $response) {
+    return $response->withRedirect('./testelogin.html');
+});
 // $app->get('/front.php', function() use ($app){}->add('UsuarioController:validarToken');
 	
 $app->group('/produtos', function() use ($app) {

@@ -31,11 +31,10 @@
                     'nome' => $usuario->nome
                 );
                 $jwt = JWT::encode($token, $this->secretKey);
-                return $response->withJson(["token" => $jwt], 201)
-                    ->withHeader('Content-type', 'application/json');
-                       
+                return $response->withJson($jwt, 201)
+                    ->withHeader('Content-type', 'application/json');   
             }
-            else
+            else    
                 return $response->withStatus(401);
         }
 

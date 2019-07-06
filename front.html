@@ -7,9 +7,13 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
 </head>
-<body>
+
+
+<body id="corpo">
 	<br>
 	<div class="container">
 		<a class="btn btn-info" href="criar.php">ADICIONAR PRODUTO&nbsp;<i class="fa fa-plus-circle"></i></a>
@@ -23,7 +27,7 @@
 					<div class="row">
 						<div class="col-lg-8">
 							<div class="form-group">
-								<a href="http://localhost/faculterca/front"><button type="button" id="ordenaID"
+								<a href="http://localhost/faculterca/front.html"><button type="button" id="ordenaID"
 										class="btn btn-default">PRINCIPAL</button></a>
 								<button type="button" id="ofertas" class="btn btn-default">EM OFERTA</button>
 							</div>
@@ -85,7 +89,7 @@
 							</button>
 						</div>
 						<div class="modal-body">
-							<form method="put" id="formModal" action="front.php" enctype="multipart/form-data">
+							<form method="put" id="formModal" action="front.html" enctype="multipart/form-data">
 										<div class="form-group">
 										<label>Editar nome Produto:</label>
 										<input type="text" name="nomeModal" id="nomeModal" class="form-control" />
@@ -140,11 +144,12 @@ $.ajax({
     type: 'GET',
     dataType: 'json',
     headers: {
-        'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiMSIsIm5vbWUiOiJGZWxpcGUifQ.5pMqZ62d4APOKC2jjMWox8M0IZDndDOZjO7thKl9TfA'
+        'Authorization': window.sessionStorage.token
     },
     dataType: 'text',
 
     success: function (result) {
+        $('#corpo').show();
         produtos = JSON.parse(result);
 
         $.each(produtos, function (i) {
@@ -168,11 +173,11 @@ $.ajax({
                     type: 'DELETE',
                     dataType: 'text',
                     headers: {
-                        'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiMSIsIm5vbWUiOiJGZWxpcGUifQ.5pMqZ62d4APOKC2jjMWox8M0IZDndDOZjO7thKl9TfA'
+                        'Authorization': window.sessionStorage.token
                     },
                     success: function (result) {
                         alert("Produto deletado");
-                        window.location = 'http://localhost/faculterca/front';
+                        window.location = 'http://localhost/faculterca/front.html';
                     }
                 });
             });
@@ -228,7 +233,7 @@ $.ajax({
                         dataType: "json",
                         data: JSON.stringify(formData),
                         headers: {
-                            'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiMSIsIm5vbWUiOiJGZWxpcGUifQ.5pMqZ62d4APOKC2jjMWox8M0IZDndDOZjO7thKl9TfA'
+                            'Authorization': window.sessionStorage.token
                         },
                         success: function () {
                             alert("Produto Cadastrado");
@@ -243,6 +248,8 @@ $.ajax({
     },
     error: function (error) {
         console.log(error);
+        alert("Para acessar a api, você deve estar autentificado");
+        $('#corpo').hide();
     }
 });
 
@@ -258,7 +265,7 @@ $("#pesquisa").click(function () {
         type: 'GET',
         dataType: 'text',
         headers: {
-            'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiMSIsIm5vbWUiOiJGZWxpcGUifQ.5pMqZ62d4APOKC2jjMWox8M0IZDndDOZjO7thKl9TfA'
+            'Authorization': window.sessionStorage.token
         },
         success: function (result) {
             produtos = JSON.parse(result);
@@ -281,11 +288,11 @@ $("#pesquisa").click(function () {
                     type: 'DELETE',
                     dataType: 'text',
                     headers: {
-                        'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiMSIsIm5vbWUiOiJGZWxpcGUifQ.5pMqZ62d4APOKC2jjMWox8M0IZDndDOZjO7thKl9TfA'
+                        'Authorization': window.sessionStorage.token
                     },
                     success: function (result) {
                         alert("Produto deletado");
-                        window.location = 'http://localhost/faculterca/front';
+                        window.location = 'http://localhost/faculterca/front.html';
                     }
                 });
             });
@@ -339,7 +346,7 @@ $("#pesquisa").click(function () {
                         dataType: "json",
                         data: JSON.stringify(formData),
                         headers: {
-                            'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiMSIsIm5vbWUiOiJGZWxpcGUifQ.5pMqZ62d4APOKC2jjMWox8M0IZDndDOZjO7thKl9TfA'
+                            'Authorization': window.sessionStorage.token
                         },
                         success: function () {
                             alert("Produto Cadastrado");
@@ -367,7 +374,7 @@ $("#selecionaCat").change(function () {
             type: 'GET',
             dataType: 'text',
             headers: {
-                'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiMSIsIm5vbWUiOiJGZWxpcGUifQ.5pMqZ62d4APOKC2jjMWox8M0IZDndDOZjO7thKl9TfA'
+                'Authorization': window.sessionStorage.token
             },
             success: function (result) {
                 produtos = JSON.parse(result);
@@ -393,11 +400,11 @@ $("#selecionaCat").change(function () {
                             type: 'DELETE',
                             dataType: 'text',
                             headers: {
-                                'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiMSIsIm5vbWUiOiJGZWxpcGUifQ.5pMqZ62d4APOKC2jjMWox8M0IZDndDOZjO7thKl9TfA'
+                                'Authorization': window.sessionStorage.token
                             },
                             success: function (result) {
                                 alert("Produto deletado");
-                                window.location = 'http://localhost/faculterca/front';
+                                window.location = 'http://localhost/faculterca/front.html';
                             }
                         });
                     });
@@ -454,7 +461,7 @@ $("#selecionaCat").change(function () {
                                 dataType: "json",
                                 data: JSON.stringify(formData),
                                 headers: {
-                                    'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiMSIsIm5vbWUiOiJGZWxpcGUifQ.5pMqZ62d4APOKC2jjMWox8M0IZDndDOZjO7thKl9TfA'
+                                    'Authorization': window.sessionStorage.token
                                 },
                                 success: function () {
                                     alert("Produto Cadastrado");
@@ -469,6 +476,7 @@ $("#selecionaCat").change(function () {
             },
             error: function (error) {
                 console.log("Você nao se autentificou");
+         
             }
         })
     }
@@ -481,7 +489,7 @@ $("#ofertas").click(function () {
         type: 'GET',
         dataType: 'text',
         headers: {
-            'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiMSIsIm5vbWUiOiJGZWxpcGUifQ.5pMqZ62d4APOKC2jjMWox8M0IZDndDOZjO7thKl9TfA'
+            'Authorization': window.sessionStorage.token
         },
         success: function (result) {
             produtos = JSON.parse(result);
@@ -507,11 +515,11 @@ $("#ofertas").click(function () {
                         type: 'DELETE',
                         dataType: 'text',
                         headers: {
-                            'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiMSIsIm5vbWUiOiJGZWxpcGUifQ.5pMqZ62d4APOKC2jjMWox8M0IZDndDOZjO7thKl9TfA'
+                            'Authorization': window.sessionStorage.token
                         },
                         success: function (result) {
                             alert("Produto deletado");
-                            window.location = 'http://localhost/faculterca/front';
+                            window.location = 'http://localhost/faculterca/front.html';
                         }
                     });
                 });
@@ -563,7 +571,7 @@ $("#ofertas").click(function () {
                             dataType: "json",
                             data: JSON.stringify(formData),
                             headers: {
-                                'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiMSIsIm5vbWUiOiJGZWxpcGUifQ.5pMqZ62d4APOKC2jjMWox8M0IZDndDOZjO7thKl9TfA'
+                                'Authorization': window.sessionStorage.token
                             },
                             success: function () {
                                 alert("Produto Cadastrado");
@@ -579,6 +587,7 @@ $("#ofertas").click(function () {
         },
         error: function (error) {
             console.log("Você nao se autentificou");
+           
         }
     })
 });
