@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>FERRAGEM</title>
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<br>
+	<div class="container">
+		<a class="btn btn-info" href="criar.php">ADICIONAR PRODUTO&nbsp;<i class="fa fa-plus-circle"></i></a>
+	</div>
+	<br>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12" style="border:1px black solid; background-color:#17a2b8; color:white; padding:15px;">
+				<fieldset class="group-border">
+					<h1>PRODUTOS DA FERRAGEM</h1>
+					<div class="row">
+						<div class="col-lg-8">
+							<div class="form-group">
+								<a href="http://localhost/faculterca/front"><button type="button" id="ordenaID"
+										class="btn btn-default">PRINCIPAL</button></a>
+								<button type="button" id="ofertas" class="btn btn-default">EM OFERTA</button>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-4">
+							<div class="form-inline">
+								<label class="control-label" for="selecionaCat">Categoria&nbsp;&nbsp;</label>
+								<select class="form-inline" id="selecionaCat" name="selecionaCat">
+									<option selected>Selecione</option>
+									<option>Lampada</option>
+									<option>Martelo</option>
+									<option>Tinta</option>
+									<option>Furadeira</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-lg-4"></div>
+						<div class="col-lg-4">
+							<div class="form-inline">
+								<input type="text" id="digiteID" style="margin-right:5px;" class="form-control"
+									placeholder="digite o ID do Produto...">
+								<button type="button" id="pesquisa" class="btn btn-dark">PESQUISAR</button>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+			</div>
+			<br>
+			<div class="table-responsive">
+				<table id="example" class="table table-striped table-bordered" style="width:100%">
+					<thead>
+						<tr style="text-align:center;">
+							<th style="font-size:20px; font-weight:bold;">ID</th>
+							<!-- <th style="font-size:20px; font-weight:bold;">Imagem do Produto</th> -->
+							<th style="font-size:20px; font-weight:bold;">Nome</th>
+							<th style="font-size:20px; font-weight:bold;">Categoria</th>
+							<th style="font-size:20px; font-weight:bold;">Preço Unidade</th>
+							<th style="font-size:20px; font-weight:bold;">Descrição</th>
+							<th style="font-size:20px; font-weight:bold;">Imagem</th>
+							<th id="acao" style="font-size:20px; font-weight:bold;">Ações</th>
+						</tr>
+					</thead>
+					<tbody class="aqui" style="text-align:center;">
+					</tbody>
+				</table>
+			</div>
+
+			<!-- Modal -->
+			<div class="modal fade" id="modalExemplo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+				aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">Editar Produto</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<form method="put" id="formModal" action="front.php" enctype="multipart/form-data">
+										<div class="form-group">
+										<label>Editar nome Produto:</label>
+										<input type="text" name="nomeModal" id="nomeModal" class="form-control" />
+									</div>
+									<div class="form-group">
+										<label for="categoria">Editar Categoria</label>
+										<select class="form-control" id="categoriaModal" name="categoriaModal">
+											<option selected>Lampada</option>
+											<option>Martelo</option>
+											<option>Tinta</option>
+											<option>Furadeira</option>
+										</select>
+									</div>
+									<div class="form-group">
+										<label for="preco">Editar Preço</label>
+										<input type="number" id="precoModal" class="form-control col-md-4"
+											name="precoModal" placeholder="Valor em reais" value="">
+									</div>
+									<div class="form-group">
+										<label for="descricaoModal">Editar Descrição</label>
+										<textarea class="form-control" id="descricaoModal" name="descricaoModal"
+											placeholder="Fale um pouco sobre o produto..." rows="3"></textarea>
+									</div>
+									<div class="form-group">
+										<h1>Imagem do Produto</h1>
+										<img class="imagem" id="imagemModal" style="height:200px;" src="">
+									</div>
+									<div class="form-group">
+										<label for="image">Selecione uma nova imagem para o produto</label>
+										<input type="file" id="file" name="file" class="form-control" />
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+									<button type="submit" name="Submit" class="btn btn-primary">Salvar mudanças</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+ <script>
+
+
+//mostrar produtos
+$.ajax({
+    url: 'http://localhost/faculterca/produtos',
+    type: 'GET',
+    dataType: 'json',
+    headers: {
+        'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiMSIsIm5vbWUiOiJGZWxpcGUifQ.5pMqZ62d4APOKC2jjMWox8M0IZDndDOZjO7thKl9TfA'
+    },
+    dataType: 'text',
+
+    success: function (result) {
+        produtos = JSON.parse(result);
+
+        $.each(produtos, function (i) {
+
+            $(".aqui").append('<tr style="background-color:white; color:red; text-align:center;">');
+            $(".aqui").append('<td style="font-size:25px; font-weight:bold;">' + produtos[i].id + '</td>');
+            $(".aqui").append('<td style="font-size:20px;">' + produtos[i].nome + '</td>');
+            $(".aqui").append('<td style="font-size:20px;">' + produtos[i].categoria + '</td>');
+            $(".aqui").append('<td style="font-size:20px;">R$' + produtos[i].preco + '</td>');
+            $(".aqui").append('<td style="font-size:18px;">' + produtos[i].descricao + '</td>');
+            $(".aqui").append('<td style="font-size:18px;"><img class="imagem" style="padding-left:50px; height:200px;" src="uploads/' + produtos[i].imagem + '"></td>');
+            $(".aqui").append('<td><br><button style="color:white;" data-toggle="modal" data-target="#modalExemplo" class="edita offset-sm-1 btn btn-info">Editar</button><br><br><a style="color:white; padding:5px;" class="remove offset-sm-1 btn btn-danger">Remover</a></td>');
+            $(".aqui").append('</tr>');
+
+            //remove
+            $(".remove").eq(i).click(function () {
+                valor = produtos[i].id;
+
+                $.ajax({
+                    url: 'http://localhost/faculterca/produtos/' + valor,
+                    type: 'DELETE',
+                    dataType: 'text',
+                    headers: {
+                        'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiMSIsIm5vbWUiOiJGZWxpcGUifQ.5pMqZ62d4APOKC2jjMWox8M0IZDndDOZjO7thKl9TfA'
+                    },
+                    success: function (result) {
+                        alert("Produto deletado");
+                        window.location = 'http://localhost/faculterca/front';
+                    }
+                });
+            });
+
+
+            var caminho = "";
+            var that = this;
+            var valor = 0;
+            //editar 
+            $(".edita").eq(i).click(function () {
+                console.log(produtos[i].id);
+                that.valor = produtos[i].id;
+                $('#nomeModal').val(produtos[i].nome);
+                $('#descricaoModal').val(produtos[i].descricao);
+                $('#precoModal').val(produtos[i].preco);
+                $('#cateogiraModal').val(produtos[i].categoria);
+                $('#imagemModal').attr("src", 'uploads/' + produtos[i].imagem);
+
+
+
+                $("#formModal").on("submit", function (event) {
+                    var form_data = new FormData();
+                    form_data.append('example1', $('#file').prop('files')[0]);
+                    $.ajax({
+                        url: 'http://localhost/faculterca/upload',
+                        dataType: 'text',
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        data: form_data,
+                        async: false,
+                        type: 'post',
+                        success: function (data) {
+                            console.log(data);
+                            that.caminho = data;
+                        }
+                    });
+                    event.preventDefault();
+                    var formData = {
+                        'id': valor,
+                        'nome': $('#nomeModal').val(),
+                        'preco': $('#precoModal').val(),
+                        'descricao': $('#descricaoModal').val(),
+                        'categoria': $('#categoriaModal').val(),
+                        'imagem': that.caminho,
+                    };
+                    console.log(formData);
+                    $.ajax({
+                        url: "http://localhost/faculterca/produtos/" + produtos[i].id,
+                        async: false,
+                        type: "put",
+                        contentType: "application/json",
+                        dataType: "json",
+                        data: JSON.stringify(formData),
+                        headers: {
+                            'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiMSIsIm5vbWUiOiJGZWxpcGUifQ.5pMqZ62d4APOKC2jjMWox8M0IZDndDOZjO7thKl9TfA'
+                        },
+                        success: function () {
+                            alert("Produto Cadastrado");
+                        },
+                        error: function () {
+                            alert("erro ao cadastrar produto, verifique todos os campos foram preenchidos");
+                        }
+                    });
+                });
+            });
+        });
+    },
+    error: function (error) {
+        console.log(error);
+    }
+});
+
+
+//buscarporid
+$("#pesquisa").click(function () {
+    if ($('#digiteID').val() == "" || $('#digiteID').val() == undefined || $('#digiteID').val() == 0) {
+        alert("é necessario dizer o id do produto")
+    }
+    valor = $('#digiteID').val();
+    $.ajax({
+        url: 'http://localhost/faculterca/produtos/' + valor,
+        type: 'GET',
+        dataType: 'text',
+        headers: {
+            'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiMSIsIm5vbWUiOiJGZWxpcGUifQ.5pMqZ62d4APOKC2jjMWox8M0IZDndDOZjO7thKl9TfA'
+        },
+        success: function (result) {
+            produtos = JSON.parse(result);
+            $("td").remove();
+            $(".aqui").append('<tr style="background-color:white; color:black; text-align:center;">');
+            $(".aqui").append('<td style="font-size:25px; font-weight:bold;">' + produtos.id + '</td>');
+            // $( ".aqui" ).append( '<td><img class="myImages" style="padding-left:50px; height:200px;" src="uploads/'+result[i].imagem+'"></td>');       
+            $(".aqui").append('<td style="font-size:20px;">' + produtos.nome + '</td>');
+            $(".aqui").append('<td style="font-size:20px;">' + produtos.categoria + '</td>');
+            $(".aqui").append('<td style="font-size:20px;">R$' + produtos.preco + '</td>');
+            $(".aqui").append('<td style="font-size:18px;">' + produtos.descricao + '</td>');
+            $(".aqui").append('<td style="font-size:18px;"><img class="imagem" style="padding-left:50px; height:200px;" src="uploads/' + produtos.imagem + '"></td>');
+            $(".aqui").append('<td><br><a style="color:white;" id="editar" data-toggle="modal" data-target="#modalExemplo" class="offset-sm-1 btn btn-info">Editar</a><br><br><a style="color:white; padding:5px;"id="remove"class="offset-sm-1 btn btn-danger">Remover</a></td>');
+            $(".aqui").append('</tr>');
+            $("#remove").click(function () {
+                valor = produtos.id;
+
+                $.ajax({
+                    url: 'http://localhost/faculterca/produtos/' + valor,
+                    type: 'DELETE',
+                    dataType: 'text',
+                    headers: {
+                        'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiMSIsIm5vbWUiOiJGZWxpcGUifQ.5pMqZ62d4APOKC2jjMWox8M0IZDndDOZjO7thKl9TfA'
+                    },
+                    success: function (result) {
+                        alert("Produto deletado");
+                        window.location = 'http://localhost/faculterca/front';
+                    }
+                });
+            });
+            var caminho = "";
+            var that = this;
+            var valor = 0;
+            //editar 
+            $("#editar").click(function () {
+                console.log(produtos.id);
+                that.valor = produtos.id;
+                $('#nomeModal').val(produtos.nome);
+                $('#descricaoModal').val(produtos.descricao);
+                $('#precoModal').val(produtos.preco);
+                $('#cateogiraModal').val(produtos.categoria);
+                $('#imagemModal').attr("src", 'uploads/' + produtos.imagem);
+
+
+
+                $("#formModal").on("submit", function (event) {
+                    var form_data = new FormData();
+                    form_data.append('example1', $('#file').prop('files')[0]);
+                    $.ajax({
+                        url: 'http://localhost/faculterca/upload',
+                        dataType: 'text',
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        data: form_data,
+                        async: false,
+                        type: 'post',
+                        success: function (data) {
+                            console.log(data);
+                            that.caminho = data;
+                        }
+                    });
+                    event.preventDefault();
+                    var formData = {
+                        'id': that.valor,
+                        'nome': $('#nomeModal').val(),
+                        'preco': $('#precoModal').val(),
+                        'descricao': $('#descricaoModal').val(),
+                        'categoria': $('#categoriaModal').val(),
+                        'imagem': that.caminho,
+                    };
+                    console.log(formData);
+                    $.ajax({
+                        url: "http://localhost/faculterca/produtos/" + that.valor,
+                        async: false,
+                        type: "put",
+                        contentType: "application/json",
+                        dataType: "json",
+                        data: JSON.stringify(formData),
+                        headers: {
+                            'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiMSIsIm5vbWUiOiJGZWxpcGUifQ.5pMqZ62d4APOKC2jjMWox8M0IZDndDOZjO7thKl9TfA'
+                        },
+                        success: function () {
+                            alert("Produto Cadastrado");
+                        },
+                        error: function () {
+                            alert("erro ao cadastrar produto, verifique todos os campos foram preenchidos");
+                        }
+                    });
+                });
+            });
+        },
+        error: function (error) {
+            console.log("Você nao se autentificou");
+        }
+    })
+});
+
+//selecionarcategoria
+$("#selecionaCat").change(function () {
+    if ($(this).val() != "Selecione") {
+        console.log($(this).val());
+        valor = $(this).val();
+        $.ajax({
+            url: 'http://localhost/faculterca/produtos/categoria/' + valor,
+            type: 'GET',
+            dataType: 'text',
+            headers: {
+                'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiMSIsIm5vbWUiOiJGZWxpcGUifQ.5pMqZ62d4APOKC2jjMWox8M0IZDndDOZjO7thKl9TfA'
+            },
+            success: function (result) {
+                produtos = JSON.parse(result);
+                $("td").remove();
+                $.each(produtos, function (i) {
+
+                    $(".aqui").append('<tr style="background-color:white; color:red; text-align:center;">');
+                    $(".aqui").append('<td style="font-size:25px; font-weight:bold;">' + produtos[i].id + '</td>');
+                    $(".aqui").append('<td style="font-size:20px;">' + produtos[i].nome + '</td>');
+                    $(".aqui").append('<td style="font-size:20px;">' + produtos[i].categoria + '</td>');
+                    $(".aqui").append('<td style="font-size:20px;">R$' + produtos[i].preco + '</td>');
+                    $(".aqui").append('<td style="font-size:18px;">' + produtos[i].descricao + '</td>');
+                    $(".aqui").append('<td style="font-size:18px;"><img class="imagem" style="padding-left:50px; height:200px;" src="uploads/' + produtos[i].imagem + '"></td>');
+                    $(".aqui").append('<td><br><button style="color:white;" data-toggle="modal" data-target="#modalExemplo" class="edita offset-sm-1 btn btn-info">Editar</button><br><br><a style="color:white; padding:5px;" class="remove offset-sm-1 btn btn-danger">Remover</a></td>');
+                    $(".aqui").append('</tr>');
+
+                    //remove
+                    $(".remove").eq(i).click(function () {
+                        valor = produtos[i].id;
+
+                        $.ajax({
+                            url: 'http://localhost/faculterca/produtos/' + valor,
+                            type: 'DELETE',
+                            dataType: 'text',
+                            headers: {
+                                'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiMSIsIm5vbWUiOiJGZWxpcGUifQ.5pMqZ62d4APOKC2jjMWox8M0IZDndDOZjO7thKl9TfA'
+                            },
+                            success: function (result) {
+                                alert("Produto deletado");
+                                window.location = 'http://localhost/faculterca/front';
+                            }
+                        });
+                    });
+
+
+                    var caminho = "";
+                    var that = this;
+                    var valor = 0;
+                    //editar 
+                    $(".edita").eq(i).click(function () {
+                        console.log(produtos[i].id);
+                        that.valor = produtos[i].id;
+                        $('#nomeModal').val(produtos[i].nome);
+                        $('#descricaoModal').val(produtos[i].descricao);
+                        $('#precoModal').val(produtos[i].preco);
+                        $('#cateogiraModal').val(produtos[i].categoria);
+                        $('#imagemModal').attr("src", 'uploads/' + produtos[i].imagem);
+
+
+
+                        $("#formModal").on("submit", function (event) {
+                            var form_data = new FormData();
+
+                            form_data.append('example1', $('#file').prop('files')[0]);
+                            $.ajax({
+                                url: 'http://localhost/faculterca/upload',
+                                dataType: 'text',
+                                cache: false,
+                                contentType: false,
+                                processData: false,
+                                data: form_data,
+                                async: false,
+                                type: 'post',
+                                success: function (data) {
+                                    console.log(data);
+                                    that.caminho = data;
+                                }
+                            });
+                            event.preventDefault();
+                            var formData = {
+                                'id': valor,
+                                'nome': $('#nomeModal').val(),
+                                'preco': $('#precoModal').val(),
+                                'descricao': $('#descricaoModal').val(),
+                                'categoria': $('#categoriaModal').val(),
+                                'imagem': that.caminho,
+                            };
+                            console.log(formData);
+                            $.ajax({
+                                url: "http://localhost/faculterca/produtos/" + produtos[i].id,
+                                async: false,
+                                type: "put",
+                                contentType: "application/json",
+                                dataType: "json",
+                                data: JSON.stringify(formData),
+                                headers: {
+                                    'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiMSIsIm5vbWUiOiJGZWxpcGUifQ.5pMqZ62d4APOKC2jjMWox8M0IZDndDOZjO7thKl9TfA'
+                                },
+                                success: function () {
+                                    alert("Produto Cadastrado");
+                                },
+                                error: function () {
+                                    alert("erro ao cadastrar produto, verifique todos os campos foram preenchidos");
+                                }
+                            });
+                        });
+                    });
+                });
+            },
+            error: function (error) {
+                console.log("Você nao se autentificou");
+            }
+        })
+    }
+});
+
+//buscarpromocao
+$("#ofertas").click(function () {
+    $.ajax({
+        url: 'http://localhost/faculterca/produtos/promocao',
+        type: 'GET',
+        dataType: 'text',
+        headers: {
+            'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiMSIsIm5vbWUiOiJGZWxpcGUifQ.5pMqZ62d4APOKC2jjMWox8M0IZDndDOZjO7thKl9TfA'
+        },
+        success: function (result) {
+            produtos = JSON.parse(result);
+            $("td").remove();
+            $.each(produtos, function (i) {
+                $(".aqui").append('<tr style="background-color:white; color:red; text-align:center;">');
+                $(".aqui").append('<td style="font-size:25px; font-weight:bold;">' + produtos[i].id + '</td>');
+                // $( ".aqui" ).append( '<td><img class="myImages" style="padding-left:50px; height:200px;" src="uploads/'+result[i].imagem+'"></td>');       
+                $(".aqui").append('<td style="font-size:20px;">' + produtos[i].nome + '</td>');
+                $(".aqui").append('<td style="font-size:20px;">' + produtos[i].categoria + '</td>');
+                $(".aqui").append('<td style="color:red; font-size:20px;">R$' + produtos[i].preco + '</td>');
+                $(".aqui").append('<td style="font-size:18px;">' + produtos[i].descricao + '</td>');
+                $(".aqui").append('<td style="font-size:18px;"><img class="myImages" style="padding-left:50px; height:200px;" src="uploads/' + produtos[i].imagem + '"></td>');
+                $(".aqui").append('<td><br><button style="color:white;" data-toggle="modal" data-target="#modalExemplo" class="edita offset-sm-1 btn btn-info">Editar</button><br><br><a style="color:white; padding:5px;" class="remove offset-sm-1 btn btn-danger">Remover</a></td>');
+                $(".aqui").append('</tr>');
+
+                //remove
+                $(".remove").eq(i).click(function () {
+                    valor = produtos[i].id;
+
+                    $.ajax({
+                        url: 'http://localhost/faculterca/produtos/' + valor,
+                        type: 'DELETE',
+                        dataType: 'text',
+                        headers: {
+                            'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiMSIsIm5vbWUiOiJGZWxpcGUifQ.5pMqZ62d4APOKC2jjMWox8M0IZDndDOZjO7thKl9TfA'
+                        },
+                        success: function (result) {
+                            alert("Produto deletado");
+                            window.location = 'http://localhost/faculterca/front';
+                        }
+                    });
+                });
+
+                var caminho = "";
+                var that = this;
+                var valor = 0;
+                //editar 
+                $(".edita").eq(i).click(function () {
+                    console.log(produtos[i].id);
+                    that.valor = produtos[i].id;
+                    $('#nomeModal').val(produtos[i].nome);
+                    $('#descricaoModal').val(produtos[i].descricao);
+                    $('#precoModal').val(produtos[i].preco);
+                    $('#cateogiraModal').val(produtos[i].categoria);
+                    $('#imagemModal').attr("src", 'uploads/' + produtos[i].imagem);
+                    $("#formModal").on("submit", function (event) {
+                        var form_data = new FormData();
+                        form_data.append('example1', $('#file').prop('files')[0]);
+                        $.ajax({
+                            url: 'http://localhost/faculterca/upload',
+                            dataType: 'text',
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            data: form_data,
+                            async: false,
+                            type: 'post',
+                            success: function (data) {
+                                console.log(data);
+                                that.caminho = data;
+                            }
+                        });
+                        event.preventDefault();
+                        var formData = {
+                            'id': valor,
+                            'nome': $('#nomeModal').val(),
+                            'preco': $('#precoModal').val(),
+                            'descricao': $('#descricaoModal').val(),
+                            'categoria': $('#categoriaModal').val(),
+                            'imagem': that.caminho,
+                        };
+                        console.log(formData);
+                        $.ajax({
+                            url: "http://localhost/faculterca/produtos/" + produtos[i].id,
+                            async: false,
+                            type: "put",
+                            contentType: "application/json",
+                            dataType: "json",
+                            data: JSON.stringify(formData),
+                            headers: {
+                                'Authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiMSIsIm5vbWUiOiJGZWxpcGUifQ.5pMqZ62d4APOKC2jjMWox8M0IZDndDOZjO7thKl9TfA'
+                            },
+                            success: function () {
+                                alert("Produto Cadastrado");
+                            },
+                            error: function () {
+                                alert("erro ao cadastrar produto, verifique todos os campos foram preenchidos");
+                            }
+                        });
+                    });
+                });
+
+            });
+        },
+        error: function (error) {
+            console.log("Você nao se autentificou");
+        }
+    })
+});
+
+</script> 
+
+</html>
