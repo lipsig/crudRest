@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <head>
+        <meta charset="utf-8">
+        <title>FERRAGEM</title>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    </head>
+</head>
+<body>
+    <form action="#" id="formLogin">
+
+        <input id="login" class="form-control" type="text">
+        <input id="senha" class="form-control" type="text">
+        <input id="submit" type="submit" value="teste">
+
+    </form>
+</body>
+
+<script>
+
+
+
+
+
+    $("#formLogin").on("submit", function (event) {
+    var formData = new FormData();
+
+    var formData = {
+    'login' :$('#login').val(), 
+    'senha' : $('#senha').val()
+};
+   
+    $.ajax({
+        url: 'http://localhost/faculterca/auth',
+        dataType: 'text',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        async: false,
+        type: 'post',
+        success: function (data) {
+            
+            console.log(data);
+         
+            
+            window.sessionStorage.token = data;
+            console.log(window.sessionStorage.token);
+            window.location.href = "front.php";
+        }
+    });
+
+
+    console.log(formData);
+
+});
+
+
+</script>
+</html>

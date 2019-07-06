@@ -9,6 +9,8 @@ include_once('UsuarioController.php');
 require './vendor/autoload.php';
 
 $app = new \Slim\App;
+
+// $app->get('/front.php', function() use ($app){}->add('UsuarioController:validarToken');
 	
 $app->group('/produtos', function() use ($app) {
     $app->get('','ProdutoController:listar');

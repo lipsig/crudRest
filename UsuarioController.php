@@ -32,7 +32,8 @@
                 );
                 $jwt = JWT::encode($token, $this->secretKey);
                 return $response->withJson(["token" => $jwt], 201)
-                    ->withHeader('Content-type', 'application/json');   
+                    ->withHeader('Content-type', 'application/json');
+                       
             }
             else
                 return $response->withStatus(401);
