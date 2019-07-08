@@ -16,7 +16,7 @@
 <body id="corpo">
 	<br>
 	<div class="container">
-		<a class="btn btn-info" href="criar.php">ADICIONAR PRODUTO&nbsp;<i class="fa fa-plus-circle"></i></a>
+		<a class="btn btn-info" href="criar.html">ADICIONAR PRODUTO&nbsp;<i class="fa fa-plus-circle"></i></a>
 	</div>
 	<br>
 	<div class="container">
@@ -248,7 +248,7 @@ $.ajax({
     },
     error: function (error) {
         console.log(error);
-        alert("Para acessar a api, você deve estar autentificado");
+        alert("Para acessar a api front, você deve estar autentificado");
         $('#corpo').hide();
     }
 });
@@ -359,7 +359,8 @@ $("#pesquisa").click(function () {
             });
         },
         error: function (error) {
-            console.log("Você nao se autentificou");
+        alert("Para acessar a api front, você deve estar autentificado");
+        $('#corpo').hide();
         }
     })
 });
@@ -475,7 +476,8 @@ $("#selecionaCat").change(function () {
                 });
             },
             error: function (error) {
-                console.log("Você nao se autentificou");
+                alert("Para acessar a api front, você deve estar autentificado");
+        $('#corpo').hide();
          
             }
         })
@@ -586,7 +588,9 @@ $("#ofertas").click(function () {
             });
         },
         error: function (error) {
-            console.log("Você nao se autentificou");
+        
+            alert("Para acessar a api front, você deve estar autentificado");
+        $('#corpo').hide();
            
         }
     })

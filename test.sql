@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: 05-Jul-2019 às 02:24
--- Versão do servidor: 5.7.23
--- versão do PHP: 7.2.10
+-- Host: 127.0.0.1
+-- Tempo de geração: 08-Jul-2019 às 22:35
+-- Versão do servidor: 10.3.16-MariaDB
+-- versão do PHP: 7.1.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `test`
+-- Banco de dados: `test`
 --
 
 -- --------------------------------------------------------
@@ -28,25 +28,22 @@ SET time_zone = "+00:00";
 -- Estrutura da tabela `produto`
 --
 
-DROP TABLE IF EXISTS `produto`;
-CREATE TABLE IF NOT EXISTS `produto` (
-  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `produto` (
+  `id` bigint(20) UNSIGNED NOT NULL,
   `nome` varchar(30) NOT NULL,
   `preco` decimal(10,2) NOT NULL,
   `descricao` varchar(100) NOT NULL,
-  `categoria` varchar(10) NOT NULL,
-  `imagem` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id` (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=51 DEFAULT CHARSET=latin1;
+  `categoria` varchar(11) NOT NULL,
+  `imagem` varchar(100) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Extraindo dados da tabela `produto`
 --
 
 INSERT INTO `produto` (`id`, `nome`, `preco`, `descricao`, `categoria`, `imagem`) VALUES
-(47, 'chuveiro', '90.00', 'sdadsads', 'Lampada', 'b8267c48b49ccc8d.png'),
-(50, 'lampada florescente', '20.00', 'brilha bastante', 'Lampada', '3a2ce110141c007d.jpg');
+(50, 'lampada florescente', '20.00', 'brilha bastante', 'Lampada', '3a2ce110141c007d.jpg'),
+(58, 'sdsdsd', '21.00', 'sdfsdf', 'Tinta', '950f43118dfcee01.png');
 
 -- --------------------------------------------------------
 
@@ -54,15 +51,12 @@ INSERT INTO `produto` (`id`, `nome`, `preco`, `descricao`, `categoria`, `imagem`
 -- Estrutura da tabela `usuario`
 --
 
-DROP TABLE IF EXISTS `usuario`;
-CREATE TABLE IF NOT EXISTS `usuario` (
-  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `usuario` (
+  `id` bigint(20) UNSIGNED NOT NULL,
   `nome` varchar(30) NOT NULL,
   `login` varchar(30) NOT NULL,
-  `senha` varchar(30) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `id` (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+  `senha` varchar(30) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Extraindo dados da tabela `usuario`
@@ -70,6 +64,40 @@ CREATE TABLE IF NOT EXISTS `usuario` (
 
 INSERT INTO `usuario` (`id`, `nome`, `login`, `senha`) VALUES
 (1, 'Felipe', 'fefe', '1234');
+
+--
+-- Índices para tabelas despejadas
+--
+
+--
+-- Índices para tabela `produto`
+--
+ALTER TABLE `produto`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `id` (`id`);
+
+--
+-- Índices para tabela `usuario`
+--
+ALTER TABLE `usuario`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `id` (`id`);
+
+--
+-- AUTO_INCREMENT de tabelas despejadas
+--
+
+--
+-- AUTO_INCREMENT de tabela `produto`
+--
+ALTER TABLE `produto`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
+
+--
+-- AUTO_INCREMENT de tabela `usuario`
+--
+ALTER TABLE `usuario`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

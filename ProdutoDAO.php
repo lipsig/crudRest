@@ -21,12 +21,13 @@
 
         public function deletar($id)
         {
-            $qDeletar = "DELETE from produto WHERE id=:id";            
+            $qDeletar = "DELETE from produto WHERE id=:id";   
             $produto = $this->buscarPorId($id);
             $pdo = PDOFactory::getConexao();
-            $comando = $pdo->prepare($qDeletar);
+            $comando = $pdo->prepare($qDeletar);     
             $comando->bindParam(":id",$id);
             $comando->execute();
+         
             return $produto;
         }
 
@@ -82,6 +83,7 @@
 		    $result = $comando->fetch(PDO::FETCH_OBJ);
 		    return new Produto($result->id,$result->nome,$result->preco,$result->descricao,$result->categoria,$result->imagem);           
         }
+
 
 
         public function buscaCategoria($categoria)

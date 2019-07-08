@@ -38,6 +38,8 @@ class ProdutoController {
         return $response->withJson($produto);
     }
 
+    
+
     public function inserir( $request, $response, $args) {
         $p = $request->getParsedBody();
         $produto = new Produto(0,$p['nome'],$p['preco'],$p['descricao'],$p['categoria'],$p['imagem']);
