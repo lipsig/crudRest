@@ -2,4 +2,6 @@
 
 Trabalho para a faculdade ADS cadeira Programação para internet
 Crud em php usando PDO
-API propria em php slim
+API propria em PHP slim
+
+Front do crud usando bootstrap e jquery
